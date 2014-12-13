@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	//Asynchronous Task
@@ -48,6 +49,9 @@ public class MainActivity extends Activity {
 	private String catApiUrl = "http://thecatapi.com/api/images/get?format=xml";
 	private String derivedUrl = "";
 	private String sampleCatUrl = "http://24.media.tumblr.com/tumblr_m1jwx7Idy41qfhy97o1_500.jpg";
+	
+	private TextView urlText;
+	private TextView sourceText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		context = MainActivity.this;
+		
+		urlText = (TextView) findViewById(R.id.imgUrl);
+		sourceText = (TextView) findViewById(R.id.sourceUrl);
 		
 		mainImage = (ImageView) findViewById(R.id.mainImage);
 		mainImage.setOnClickListener(new OnClickListener(){
@@ -65,8 +72,8 @@ public class MainActivity extends Activity {
 		});
 		
 		//get xml with picture link(s)
-		//getLinksAsync task1 = new getLinksAsync();
-		//task1.execute((Object[]) null);
+		getLinksAsync task1 = new getLinksAsync();
+		task1.execute((Object[]) null);
 		
 		//load pic into image
 		//getCatAsync task2 = new getCatAsync();
@@ -187,6 +194,8 @@ public class MainActivity extends Activity {
 				System.out.println(doc.getElementsByTagName("url").item(0).getTextContent());
 				System.out.println(doc.getElementsByTagName("source_url").item(0).getTextContent());
 				derivedUrl = doc.getElementsByTagName("url").item(0).getTextContent().toString();
+				urlText.setText("Image URL: " + doc.getElementsByTagName("url").item(0).getTextContent().toString());
+				sourceText.setText("Source: " + doc.getElementsByTagName("source_url").item(0).getTextContent().toString());
 				System.out.println("Derived URL: " + derivedUrl);
 				//load pic into image
 				getCatAsync task2 = new getCatAsync();

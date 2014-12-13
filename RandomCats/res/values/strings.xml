@@ -4,5 +4,6 @@
     <string name="app_name">RandomCats</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="clickString">CLICK IMAGE FOR MORE CAT PICS!</string>
 
 </resources>

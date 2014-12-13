@@ -16,16 +16,36 @@
         android:text="@string/hello_world" 
         />
         --> 
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <ImageView
-        android:id="@+id/mainImage"
+        
+    <ImageView
+    android:id="@+id/mainImage"
+    android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:layout_weight="15"
+    />
+    <TextView
+        android:id="@+id/imgUrl"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        />
-    </LinearLayout>
-
+        android:layout_height="0dp"
+        android:text=""
+        android:layout_weight="2" 
+        android:gravity="center" 
+    />
+    <TextView
+        android:id="@+id/sourceUrl"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:text=""
+        android:layout_weight="1" 
+        android:gravity="center" 
+    />
+    <TextView
+        android:id="@+id/clickMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:text="@string/clickString"
+        android:layout_weight="1"
+        android:gravity="center" 
+    />
+    
 </LinearLayout>
