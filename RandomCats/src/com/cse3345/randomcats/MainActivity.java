@@ -31,6 +31,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 public class MainActivity extends Activity {
@@ -43,8 +45,8 @@ public class MainActivity extends Activity {
 	private Drawable pic;
 	
 	private String response;
-	//private String catApiUrl = "http://thecatapi.com/api/images/get?format=xml";
-	private String catApiUrl;
+	private String catApiUrl = "http://thecatapi.com/api/images/get?format=xml";
+	private String derivedUrl = "";
 	private String sampleCatUrl = "http://24.media.tumblr.com/tumblr_m1jwx7Idy41qfhy97o1_500.jpg";
 
 	@Override
@@ -55,14 +57,20 @@ public class MainActivity extends Activity {
 		context = MainActivity.this;
 		
 		mainImage = (ImageView) findViewById(R.id.mainImage);
+		mainImage.setOnClickListener(new OnClickListener(){
+			public void onClick(View view){
+				getLinksAsync task1 = new getLinksAsync();
+				task1.execute((Object[]) null);
+			}
+		});
 		
 		//get xml with picture link(s)
-		getLinksAsync task1 = new getLinksAsync();
-		task1.execute((Object[]) null);
+		//getLinksAsync task1 = new getLinksAsync();
+		//task1.execute((Object[]) null);
 		
 		//load pic into image
-		getCatAsync task2 = new getCatAsync();
-		task2.execute((Object[]) null);
+		//getCatAsync task2 = new getCatAsync();
+		//task2.execute((Object[]) null);
 		
 	}
 
@@ -91,7 +99,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			progressDialogPic = new ProgressDialog(context);
-			progressDialogPic.setTitle("Loading a cat pic...");
+			progressDialogPic.setTitle("Loading your cat pic...");
 			progressDialogPic.setMessage(":3");
 			progressDialogPic.setCancelable(false);
 			progressDialogPic.setIndeterminate(true);
@@ -101,7 +109,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected Object doInBackground(Object... params) {
 			try {
-				InputStream is = (InputStream) new URL(sampleCatUrl).getContent();
+				InputStream is = (InputStream) new URL(derivedUrl).getContent();
 				pic = Drawable.createFromStream(is, "");
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -135,12 +143,12 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			progressDialog = new ProgressDialog(context);
+			/*progressDialog = new ProgressDialog(context);
 			progressDialog.setTitle("Loading cats...");
 			progressDialog.setMessage(":3");
 			progressDialog.setCancelable(false);
 			progressDialog.setIndeterminate(true);
-			progressDialog.show();
+			progressDialog.show();*/
 		}
 
 		@Override
@@ -154,7 +162,7 @@ public class MainActivity extends Activity {
 			} catch (ParseException | IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println(response);
+			System.out.println("response:" + response);
 			if(response.length() != 0){
 				success = true;
 			}
@@ -163,9 +171,9 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Object result) {
-			if (progressDialog != null) {
+			/*if (progressDialog != null) {
 				progressDialog.dismiss();
-			}
+			}*/
 			if (success) {
 				//This is a success full URL hit
 				Document doc = null;
@@ -178,7 +186,11 @@ public class MainActivity extends Activity {
 				} 
 				System.out.println(doc.getElementsByTagName("url").item(0).getTextContent());
 				System.out.println(doc.getElementsByTagName("source_url").item(0).getTextContent());
-				catApiUrl = doc.getElementsByTagName("url").item(0).getTextContent();
+				derivedUrl = doc.getElementsByTagName("url").item(0).getTextContent().toString();
+				System.out.println("Derived URL: " + derivedUrl);
+				//load pic into image
+				getCatAsync task2 = new getCatAsync();
+				task2.execute((Object[]) null);
 			}
 		}
 	}
